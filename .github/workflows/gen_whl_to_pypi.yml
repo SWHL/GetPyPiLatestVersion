@@ -7,7 +7,7 @@ on:
       - 'get_pypi_latest_version/**'
       - 'docs/docs.md'
       - 'setup.py'
-      - '.github/gen_whl_to_pypi.yml'
+      - '.github/workflows/gen_whl_to_pypi.yml'
 
 jobs:
   GenerateWHL_PushPyPi:
