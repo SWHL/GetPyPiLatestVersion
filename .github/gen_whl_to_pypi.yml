@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'get_pypi_latest_version/**'
-      - 'README.md'
+      - 'docs/docs.md'
       - 'setup.py'
       - '.github/gen_whl_to_pypi.yml'
 
