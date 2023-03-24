@@ -35,6 +35,10 @@ from get_pypi_latest_version import GetPyPiLatestVersion
 
 obtainer = GetPyPiLatestVersion()
 
-latest_version = obtainer(args.package_name)
+package_name = 'opencv-python'
+latest_version = obtainer(package_name)
 print(latest_version)
 ```
+
+### Reference
+- [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)

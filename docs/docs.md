@@ -35,6 +35,7 @@ from get_pypi_latest_version import GetPyPiLatestVersion
 
 obtainer = GetPyPiLatestVersion()
 
-latest_version = obtainer(args.package_name)
+package_name = 'opencv-python'
+latest_version = obtainer(package_name)
 print(latest_version)
 ```

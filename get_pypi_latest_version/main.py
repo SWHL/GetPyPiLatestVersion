@@ -2,9 +2,12 @@
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
 import argparse
+import re
+import subprocess
+from typing import Optional
 
-from html5lib.html5parser import parse
 import requests
+from html5lib.html5parser import parse
 
 REQUESTS_TIMEOUT = 15
 
@@ -14,6 +17,18 @@ class GetPyPiLatestVersion():
         self._base_url = url
 
     def __call__(self, package_name: str) -> str:
+        latest_ver_web = self.get_by_spider_web(package_name)
+        latest_ver_pip = self.get_by_pip_index(package_name)
+
+        if latest_ver_web and latest_ver_pip:
+            if latest_ver_web != latest_ver_pip:
+                return latest_ver_web
+            return latest_ver_web
+
+        latest_ver = latest_ver_web or latest_ver_pip
+        return latest_ver
+
+    def get_by_spider_web(self, package_name: str) -> str:
         search = {"q": package_name}
         response = requests.session().get(
             self._base_url + "search", params=search, timeout=REQUESTS_TIMEOUT
@@ -35,19 +50,36 @@ class GetPyPiLatestVersion():
 
             name = name_element.text
             version = version_element.text
-
-            description_element = result.find(
-                "p[@class='package-snippet__description']"
-            )
-            description = (
-                description_element.text
-                if description_element is not None and description_element.text
-                else ""
-            )
-
             if name == package_name.replace('_', '-'):
                 return version
         return ''
+
+    def get_by_pip_index(self, package_name: str) -> str:
+        output = subprocess.run(["pip", "index", "versions", package_name],
+                                capture_output=True)
+        output = output.stdout.decode('utf-8')
+        if output:
+            return self.extract_version(output)
+        return ''
+
+    @staticmethod
+    def extract_version(message: str) -> str:
+        pattern = r'\d+\.(?:\d+\.)*\d+'
+        matched_versions = re.findall(pattern, message)
+        if matched_versions:
+            return matched_versions[0]
+        return ''
+
+    @staticmethod
+    def version_add_one(version: Optional[str], add_loc: int = -1) -> str:
+        if not version:
+            return '1.0.0'
+
+        version_list = version.split('.')
+        mini_version = str(int(version_list[add_loc]) + 1)
+        version_list[add_loc] = mini_version
+        new_version = '.'.join(version_list)
+        return new_version
 
 
 def main():

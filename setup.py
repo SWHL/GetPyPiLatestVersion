@@ -1,9 +1,12 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
+import sys
 from pathlib import Path
 
 import setuptools
+
+from get_pypi_latest_version import GetPyPiLatestVersion
 
 
 def get_readme():
@@ -16,11 +19,23 @@ def get_readme():
 
 MODULE_NAME = 'get_pypi_latest_version'
 
+obtainer = GetPyPiLatestVersion()
+
+latest_version = obtainer(MODULE_NAME)
+VERSION_NUM = obtainer.version_add_one(latest_version)
+
+if len(sys.argv) > 2:
+    match_str = ' '.join(sys.argv[2:])
+    matched_versions = obtainer.extract_version(match_str)
+    if matched_versions:
+        VERSION_NUM = matched_versions
+sys.argv = sys.argv[:2]
+
 setuptools.setup(
     name=MODULE_NAME,
-    version='0.0.1',
+    version=VERSION_NUM,
     platforms="Any",
-    description="A cross platform OCR Library based on OnnxRuntime.",
+    description="Get the latest version of the specified python package name in the pypi.",
     long_description=get_readme(),
     long_description_content_type='text/markdown',
     author="SWHL",
