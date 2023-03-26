@@ -1,4 +1,4 @@
-README
+`SWHL/GetPyPiLatestVersion <https://img.shields.io/badge/Stars-7k-lightgrey?logo=github&style=social>`_
 ========================================
 
 .. toctree::
