@@ -1,0 +1,61 @@
+name: Deploy the docs to RTD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'get_pypi_latest_version/**'
+      - '.github/workflows/deploy_docs_to_rtd.yml'
+      - 'README.md'
+
+env:
+  REPO_SSH: ${{ github.event.repository.git_url }}
+  USER_NAME: ${{ github.event.repository.owner.name }}
+  USER_EMAIL: ${{ github.event.repository.owner.email }}
+  CLONE_DIR: ${{ github.event.repository.namme }}
+  SUBMMIT_BRANCH: docs
+  PACKAGE_NAME: get_pypi_latest_version
+
+jobs:
+  GenerateWHL_PushPyPi:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+          architecture: 'x64'
+
+      - name: Set SSH Environment
+        env:
+          DEPLOY_KEYS: ${{ secrets.GEN_PYTHON_SDK }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$DEPLOY_KEYS" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh && chmod 600 ~/.ssh/*
+          git config --global user.name $USER_NAME
+          git config --global user.email $USER_EMAIL
+
+      - name: Clone main repo
+        run: |
+          git clone $REPO_SSH ${CLONE_DIR}
+
+      - name: Summit repo to docs branch.
+        run: |
+          git clone -b ${SUBMMIT_BRANCH} $REPO_SSH ${SUBMMIT_BRANCH}
+          cd ${SUBMMIT_BRANCH}
+          rm -r ${PACKAGE_NAME}
+          rm source/README.md
+
+          cp -r ../${CLONE_DIR}/${PACGAGE_NAME} .
+          cp ../${CLONE_DIR}/README.md source/
+
+          sphinx-apidoc -o source/API/ ./get_pypi_latest_version -f -E -M
+
+          git add .
+          git status
+          git commit -m 'Actions auto update' && git push -f origin ${SUBMMIT_BRANCH} || echo "No changes to commit"
