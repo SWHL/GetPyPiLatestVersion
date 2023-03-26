@@ -44,7 +44,8 @@ print(latest_version)
 ```
 
 ### Change log
-- 2023-03-26 v0.0.4 update:
+- 2023-03-26 v0.0.4~5 update:
+  - Add [docs](https://getpypilatestversion.readthedocs.io/en/latest/)
 
 ### Reference
 - [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)
