@@ -40,13 +40,9 @@ jobs:
           git config --global user.name $USER_NAME
           git config --global user.email $USER_EMAIL
 
-      - name: Clone main repo
-        run: |
-          git clone $REPO_SSH ${CLONE_DIR}
-          ls
-
       - name: Summit repo to docs branch.
         run: |
+          ls
           git clone -b ${SUBMMIT_BRANCH} $REPO_SSH ${SUBMMIT_BRANCH}
           cd ${SUBMMIT_BRANCH}
           rm -r ${PACKAGE_NAME}
