@@ -45,7 +45,7 @@ jobs:
           ls
           rm -r docs
 
-          git clone -b ${SUBMMIT_BRANCH} $REPO_SSH ${SUBMMIT_BRANCH}
+          git clone -b ${SUBMMIT_BRANCH} $CLONE_URL ${SUBMMIT_BRANCH}
           cd ${SUBMMIT_BRANCH}
           rm -r ${PACKAGE_NAME} || true
           rm source/README.md || true
