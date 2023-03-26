@@ -1,21 +1,16 @@
 get\_pypi\_latest\_version package
 ==================================
 
-Submodules
-----------
-
-get\_pypi\_latest\_version.main module
---------------------------------------
-
-.. automodule:: get_pypi_latest_version.main
+.. automodule:: get_pypi_latest_version
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+Submodules
+----------
 
-.. automodule:: get_pypi_latest_version
+
+.. automodule:: get_pypi_latest_version.main
    :members:
    :undoc-members:
    :show-inheritance:
