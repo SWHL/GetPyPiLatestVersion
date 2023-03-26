@@ -1,4 +1,4 @@
-get_pypi_latest_version
+API
 =======================
 
 .. toctree::
