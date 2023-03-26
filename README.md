@@ -40,5 +40,8 @@ latest_version = obtainer(package_name)
 print(latest_version)
 ```
 
+### Change log
+- 2023-03-26 v0.0.4 update:
+
 ### Reference
 - [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)

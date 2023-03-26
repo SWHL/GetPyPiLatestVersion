@@ -17,6 +17,14 @@ class GetPyPiLatestVersion():
         self._base_url = url
 
     def __call__(self, package_name: str) -> str:
+        """call
+
+        Args:
+            package_name (str): The name of the package you want to get the latest version.
+
+        Returns:
+            str: the latest version
+        """
         latest_ver_web = self.get_by_spider_web(package_name)
         latest_ver_pip = self.get_by_pip_index(package_name)
 
@@ -64,6 +72,14 @@ class GetPyPiLatestVersion():
 
     @staticmethod
     def extract_version(message: str) -> str:
+        """Extract the version string matched the semver 2.0.0 from the string.
+
+        Args:
+            message (str): the text with the version num.
+
+        Returns:
+            str: '' or 'x.x.x'
+        """
         pattern = r'\d+\.(?:\d+\.)*\d+'
         matched_versions = re.findall(pattern, message)
         if matched_versions:
@@ -72,6 +88,15 @@ class GetPyPiLatestVersion():
 
     @staticmethod
     def version_add_one(version: Optional[str], add_loc: int = -1) -> str:
+        """Add one for direct version.
+
+        Args:
+            version (Optional[str]): current version num
+            add_loc (int, optional): Where to add one. Defaults to -1.
+
+        Returns:
+            str: the version after adding one.
+        """
         if not version:
             return '1.0.0'
 
