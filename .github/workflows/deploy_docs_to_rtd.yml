@@ -17,7 +17,7 @@ env:
   PACKAGE_NAME: get_pypi_latest_version
 
 jobs:
-  GenerateWHL_PushPyPi:
+  Deploy_TO_RTD:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,6 +43,8 @@ jobs:
       - name: Summit repo to docs branch.
         run: |
           ls
+          rm -r docs
+
           git clone -b ${SUBMMIT_BRANCH} $REPO_SSH ${SUBMMIT_BRANCH}
           cd ${SUBMMIT_BRANCH}
           rm -r ${PACKAGE_NAME}
