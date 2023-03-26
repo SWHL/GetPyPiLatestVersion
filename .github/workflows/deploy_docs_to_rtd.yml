@@ -30,7 +30,7 @@ jobs:
 
       - name: Set SSH Environment
         env:
-          DEPLOY_KEYS: ${{ secrets.GEN_PYTHON_SDK }}
+          DEPLOY_KEYS: ${{ secrets.DEPLOY_KEYS }}
         run: |
           mkdir -p ~/.ssh/
           echo "$DEPLOY_KEYS" > ~/.ssh/id_rsa
@@ -49,6 +49,7 @@ jobs:
           rm -r ${PACKAGE_NAME} || true
           rm source/README.md || true
 
+          echor ${SUBMMIT_BRANCH}
           ls
           cp -r ../${PACKAGE_NAME} .
           cp ../README.md source/
