@@ -1,3 +1,5 @@
+html5lib>=1.1
+requests>=2.28.1
 sphinx_rtd_theme
 sphinxcontrib.mermaid
 myst-parser
