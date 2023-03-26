@@ -60,9 +60,11 @@ jobs:
 
           sphinx-apidoc -o source/API/ ./${PACKAGE_NAME} -f -E -M
 
+          sed -i '1d' source/API/modules.rst
+          sed -i '1i\API' source/API/modules.rst
+
           git add .
           git status
-          git branch -a
           git remote remove origin
           git remote add origin ${REPO_SSH}
           git commit -m 'Actions auto update' && git push -f origin ${SUBMMIT_BRANCH} || echo "No changes to commit"
