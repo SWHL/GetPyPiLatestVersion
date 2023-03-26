@@ -12,7 +12,7 @@ env:
   REPO_SSH: ${{ github.event.repository.git_url }}
   USER_NAME: ${{ github.event.repository.owner.name }}
   USER_EMAIL: ${{ github.event.repository.owner.email }}
-  CLONE_DIR: ${{ github.event.repository.namme }}
+  CLONE_DIR: ${{ github.event.repository.name }}
   SUBMMIT_BRANCH: docs
   PACKAGE_NAME: get_pypi_latest_version
 
@@ -43,6 +43,7 @@ jobs:
       - name: Clone main repo
         run: |
           git clone $REPO_SSH ${CLONE_DIR}
+          ls
 
       - name: Summit repo to docs branch.
         run: |
@@ -51,6 +52,7 @@ jobs:
           rm -r ${PACKAGE_NAME}
           rm source/README.md
 
+          ls
           cp -r ../${CLONE_DIR}/${PACGAGE_NAME} .
           cp ../${CLONE_DIR}/README.md source/
 
