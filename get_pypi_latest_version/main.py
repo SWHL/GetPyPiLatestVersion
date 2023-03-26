@@ -94,9 +94,7 @@ class GetPyPiLatestVersion():
 
         Args:
             version (Optional[str]): current version num
-            add_loc (int, optional): Where to add one from the back to front.
-            Default is -1. e.g. 4.0.7, when `add_loc=-1` → 4.0.8,
-            `add_loc=-2` → 4.1.0， `add_loc=-3` → 5.0.0
+            add_loc (int, optional): Where to add one from the back to front. Default is -1. e.g. 4.0.7, when `add_loc=-1` → 4.0.8, `add_loc=-2` → 4.1.0， `add_loc=-3` → 5.0.0.
 
         Returns:
             str: the version after adding one.
