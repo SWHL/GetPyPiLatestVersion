@@ -61,4 +61,5 @@ jobs:
 
           git add .
           git status
+          git branch -a
           git commit -m 'Actions auto update' && git push -f origin ${SUBMMIT_BRANCH} || echo "No changes to commit"
