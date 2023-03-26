@@ -12,7 +12,6 @@
 ```bash
 $ pip install get_pypi_latest_version
 ```
-
 ### 2. Run by command line.
 - Usage:
     ```bash
@@ -30,7 +29,6 @@ $ pip install get_pypi_latest_version
     $ get_pypi_latest_version opencv-python
     # 4.7.0.72
     ```
-
 ### 3. Use by python script.
 ```python
 from get_pypi_latest_version import GetPyPiLatestVersion
