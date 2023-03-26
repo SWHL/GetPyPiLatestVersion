@@ -9,7 +9,7 @@ on:
       - 'README.md'
 
 env:
-  REPO_SSH: ${{ github.event.repository.clone_url }}
+  REPO_SSH: ${{ github.event.repository.git_url }}
   USER_NAME: ${{ github.event.repository.owner.name }}
   USER_EMAIL: ${{ github.event.repository.owner.email }}
   SUBMMIT_BRANCH: docs
@@ -62,4 +62,5 @@ jobs:
           git add .
           git status
           git branch -a
+          git remote -v
           git commit -m 'Actions auto update' && git push -f origin ${SUBMMIT_BRANCH} || echo "No changes to commit"
