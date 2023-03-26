@@ -54,6 +54,8 @@ jobs:
           cp -r ../${CLONE_DIR}/${PACGAGE_NAME} .
           cp ../${CLONE_DIR}/README.md source/
 
+          pip install sphinx
+
           sphinx-apidoc -o source/API/ ./get_pypi_latest_version -f -E -M
 
           git add .
