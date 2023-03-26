@@ -13,6 +13,8 @@ REQUESTS_TIMEOUT = 15
 
 
 class GetPyPiLatestVersion():
+    """Get the latest version of the specified python package name in the pypi.
+    """
     def __init__(self, url: str = "https://pypi.org/",) -> None:
         self._base_url = url
 
