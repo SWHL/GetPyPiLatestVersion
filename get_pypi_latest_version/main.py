@@ -94,7 +94,9 @@ class GetPyPiLatestVersion():
 
         Args:
             version (Optional[str]): current version num
-            add_loc (int, optional): Where to add one. Defaults to -1.
+            add_loc (int, optional): Where to add one from the back to front.
+            Default is -1. e.g. 4.0.7, when `add_loc=-1` → 4.0.8,
+            `add_loc=-2` → 4.1.0， `add_loc=-3` → 5.0.0
 
         Returns:
             str: the version after adding one.
@@ -103,8 +105,14 @@ class GetPyPiLatestVersion():
             return '1.0.0'
 
         version_list = version.split('.')
-        mini_version = str(int(version_list[add_loc]) + 1)
-        version_list[add_loc] = mini_version
+        if abs(add_loc) > len(version_list):
+            raise ValueError(f'add_loc must be between [-{len(version_list)}, -1]. But now add_loc is {add_loc}.')
+
+        add_one_ver_num = str(int(version_list[add_loc]) + 1)
+        if add_loc != -1:
+            version_list[add_loc+1:] = ['0'] * len(version_list[add_loc+1:])
+
+        version_list[add_loc] = add_one_ver_num
         new_version = '.'.join(version_list)
         return new_version
 
