@@ -47,8 +47,8 @@ jobs:
 
           git clone -b ${SUBMMIT_BRANCH} $REPO_SSH ${SUBMMIT_BRANCH}
           cd ${SUBMMIT_BRANCH}
-          rm -r ${PACKAGE_NAME}
-          rm source/README.md
+          rm -r ${PACKAGE_NAME} || true
+          rm source/README.md || true
 
           ls
           cp -r ../${CLONE_DIR}/${PACGAGE_NAME} .
