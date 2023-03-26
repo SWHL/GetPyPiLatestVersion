@@ -51,12 +51,12 @@ jobs:
           rm source/README.md || true
 
           ls
-          cp -r ../${CLONE_DIR}/${PACGAGE_NAME} .
+          cp -r ../${CLONE_DIR}/${PACKAGE_NAME} .
           cp ../${CLONE_DIR}/README.md source/
 
           pip install sphinx
 
-          sphinx-apidoc -o source/API/ ./get_pypi_latest_version -f -E -M
+          sphinx-apidoc -o source/API/ ./${PACKAGE_NAME} -f -E -M
 
           git add .
           git status
