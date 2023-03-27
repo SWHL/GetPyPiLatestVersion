@@ -34,29 +34,39 @@ sys.argv = sys.argv[:2]
 setuptools.setup(
     name=MODULE_NAME,
     version=VERSION_NUM,
-    platforms="Any",
-    description="Get the latest version of the specified python package name in the pypi.",
+    platforms='Any',
+    description='Get the latest version of the specified python package name in the pypi.',
     long_description=get_readme(),
     long_description_content_type='text/markdown',
-    author="SWHL",
-    author_email="liekkaskono@163.com",
-    url="https://github.com/SWHL/GetPyPiLatestVersion",
+    author='SWHL',
+    author_email='liekkaskono@163.com',
+    url='https://github.com/SWHL/GetPyPiLatestVersion',
     download_url='https://github.com/SWHL/GetPyPiLatestVersion.git',
     license='Apache-2.0',
     include_package_data=True,
-    install_requires=["html5lib>=1.1", "requests>=2.28.1"],
+    install_requires=['html5lib>=1.1', 'requests>=2.28.1', 'pip>=21.2'],
     packages=[MODULE_NAME],
     keywords=[
         'pypi,latest_version'
     ],
     classifiers=[
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache-2.0 License',
+        'Topic :: Software Development :: Build Tools',
     ],
+    python_requires='>=3.7,<=3.10',
     entry_points={
         'console_scripts': [f'{MODULE_NAME}={MODULE_NAME}.main:main'],
+    },
+    project_urls={
+        "Documentation": "https://getpypilatestversion.readthedocs.io/",
+        "Source": "https://github.com/SWHL/GetPyPiLatestVersion",
+        "Changelog": "https://github.com/SWHL/GetPyPiLatestVersion#change-log",
     }
 )
