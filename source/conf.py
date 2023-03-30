@@ -41,6 +41,13 @@ myst_enable_extensions = [
     # "colon_fence"  # 支持colons
 ]
 
+autodoc_default_options = {
+    'member-order': 'bysource',
+    'special-members': True,
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
+
 templates_path = ['_templates']
 exclude_patterns = []
 
