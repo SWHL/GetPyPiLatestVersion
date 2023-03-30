@@ -43,9 +43,9 @@ myst_enable_extensions = [
 
 autodoc_default_options = {
     'member-order': 'bysource',
-    'special-members': True,
+    'special-members': '__init__, __call__',
     'undoc-members': True,
-    'exclude-members': '__weakref__'
+    'exclude-members': '__weakref__, __dict__,__module__'
 }
 
 templates_path = ['_templates']
