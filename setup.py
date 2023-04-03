@@ -57,10 +57,6 @@ setuptools.setup(
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
-        'Development Status :: 5 - Production/Stable',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: Apache-2.0 License',
-        'Topic :: Software Development :: Build Tools',
     ],
     python_requires='>=3.7,<=3.10',
     entry_points={
