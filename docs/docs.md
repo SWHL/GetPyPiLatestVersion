@@ -16,18 +16,24 @@ $ pip install get_pypi_latest_version
 - Usage:
     ```bash
     $ get_pypi_latest_version -h
-    usage: get_pypi_latest_version [-h] package_name
+    usage: get_pypi_latest_version [-h] [-a] package_name
 
     positional arguments:
-    package_name  The specified python package name. e.g. opencv-python.
+    package_name        The specified python package name. e.g. opencv-python.
 
     optional arguments:
-    -h, --help    show this help message and exit
+    -h, --help          show this help message and exit
+    -a, --all_versions  Whether to return all release versions. Default is
+                        False.
     ```
 - Example:
     ```bash
     $ get_pypi_latest_version opencv-python
     # 4.7.0.72
+
+    $ get_pypi_latest_version opencv-python -a
+    # 4.7.0.72
+    # ['4.7.0.72', '4.7.0.68', '4.6.0.66', '4.5.5.64', '4.5.5.62', '4.5.4.60', '4.5.4.58', '4.5.3.56', '4.5.2.54', '4.5.2.52', '4.5.1.48', '4.4.0.46', '4.4.0.44', '4.4.0.42', '4.4.0.40', '4.3.0.38', '4.3.0.36', '4.2.0.34', '4.2.0.32', '4.1.2.30', '4.1.1.26', '4.1.0.25', '4.0.1.24', '4.0.0.21', '3.4.9.33', '3.4.8.29', '3.4.7.28', '3.4.6.27', '3.4.5.20', '3.4.4.19', '3.4.3.18', '3.4.2.17', '3.4.18.65', '3.4.17.63', '3.4.17.61', '3.4.16.59', '3.4.16.57', '3.4.15.55', '3.4.14.53', '3.4.14.51', '3.4.13.47', '3.4.11.45', '3.4.11.43', '3.4.11.41', '3.4.10.37', '3.4.1.15', '3.4.0.14']
     ```
 ### 3. Use by python script.
 ```python
@@ -38,4 +44,19 @@ obtainer = GetPyPiLatestVersion()
 package_name = 'opencv-python'
 latest_version = obtainer(package_name)
 print(latest_version)
+
+result = obtainer(package_name,return_all_versions=True)
+latest_version = result[0]
+all_versions = result[1]
+print(latest_version)
+print(all_versions)
 ```
+### Change log
+- 2023-04-03 v0.0.8 update:
+  - Add `return_all_versions` parameter.
+
+- 2023-03-26 v0.0.4~5 update:
+  - Add [docs](https://getpypilatestversion.readthedocs.io/en/latest/)
+
+### Reference
+- [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)

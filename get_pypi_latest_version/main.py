@@ -4,7 +4,7 @@
 import argparse
 import re
 import subprocess
-from typing import Optional
+from typing import Dict, List, Optional, Tuple, Union
 
 import requests
 from html5lib.html5parser import parse
@@ -15,27 +15,34 @@ REQUESTS_TIMEOUT = 15
 class GetPyPiLatestVersion():
     """Get the latest version of the specified python package name in the pypi.
     """
+
     def __init__(self, url: str = "https://pypi.org/",) -> None:
         self._base_url = url
+        self.pip_versions = []
 
-    def __call__(self, package_name: str) -> str:
-        """call
+    def __call__(self, package_name: str,
+                 return_all_versions: bool = False) -> Union[str, Tuple[str, List]]:
+        """
 
         Args:
             package_name (str): The name of the package you want to get the latest version.
+            return_all_versions (bool, optional): Whether to return all release versions. Default is False.
 
         Returns:
-            str: the latest version
+            Union[str, Tuple[str, List]]: the latest version. When :code:`return_all_versions=False` , Return Tuple: latest_version_str, all_release_list
         """
-        latest_ver_web = self.get_by_spider_web(package_name)
+
+        all_versions_web = self.get_by_spider_web(package_name)
+        latest_ver_web = all_versions_web[0]
+
         latest_ver_pip = self.get_by_pip_index(package_name)
 
-        if latest_ver_web and latest_ver_pip:
-            if latest_ver_web != latest_ver_pip:
-                return latest_ver_web
-            return latest_ver_web
+        all_concat_ver = list(set(all_versions_web).union(self.pip_versions))
+        all_concat_ver.sort(reverse=True)
 
-        latest_ver = latest_ver_web or latest_ver_pip
+        latest_ver = latest_ver_web or latest_ver_pip or ''
+        if return_all_versions:
+            return latest_ver, all_concat_ver
         return latest_ver
 
     def get_by_spider_web(self, package_name: str) -> str:
@@ -46,9 +53,13 @@ class GetPyPiLatestVersion():
 
         content = parse(response.content, namespaceHTMLElements=False)
         search_packages = content.findall(".//*[@class='package-snippet']")
+
+        package_info = {}
         for result in search_packages:
             name_element = result.find("h3/*[@class='package-snippet__name']")
-            version_element = result.find("h3/*[@class='package-snippet__version']")
+            version_element = result.find(
+                "h3/*[@class='package-snippet__version']")
+            package_href = result.attrib.get('href')
 
             if (
                 name_element is None
@@ -61,10 +72,36 @@ class GetPyPiLatestVersion():
             name = name_element.text
             version = version_element.text
             if name == package_name.replace('_', '-'):
-                return version
-        return ''
+                if package_href:
+                    package_info['href'] = self._base_url + package_href
+                package_info['latest'] = version
+                break
+        all_versions = self.get_all_release_versions(package_info)
+        return all_versions
 
-    def get_by_pip_index(self, package_name: str) -> str:
+    def get_all_release_versions(self, package_info: Dict):
+        response = requests.session().get(package_info['href'] + '#history')
+        content = parse(response.content, namespaceHTMLElements=False)
+        a_elements = content.findall(
+            './/*[@class="release"]/a[@class="card release__card"]')
+
+        release_list = [package_info['latest']]
+        for i, a_ele in enumerate(a_elements):
+            p_ele = a_ele.find('p[@class="release__version"]')
+
+            # 查看是否是yanked 版本
+            yanked_ele = p_ele.find('span[@class="badge badge--danger"]')
+            if yanked_ele is not None:
+                # 有值，则说明是yanked
+                continue
+
+            cur_version = [v.strip() for v in p_ele.text.split('\n')
+                           if v.strip()][0]
+            release_list.append(cur_version)
+        release_list.sort(reverse=True)
+        return release_list
+
+    def get_by_pip_index(self, package_name: str) -> List:
         output = subprocess.run(["pip", "index", "versions", package_name],
                                 capture_output=True)
         output = output.stdout.decode('utf-8')
@@ -72,8 +109,7 @@ class GetPyPiLatestVersion():
             return self.extract_version(output)
         return ''
 
-    @staticmethod
-    def extract_version(message: str) -> str:
+    def extract_version(self, message: str) -> str:
         """Extract the version string matched the semver 2.0.0 from the string.
 
         Args:
@@ -84,8 +120,12 @@ class GetPyPiLatestVersion():
         """
         pattern = r'\d+\.(?:\d+\.)*\d+'
         matched_versions = re.findall(pattern, message)
-        if matched_versions:
-            return matched_versions[0]
+        all_versions = list(set(matched_versions))
+        all_versions.sort(reverse=True)
+
+        if all_versions:
+            self.pip_versions = all_versions
+            return all_versions[0]
         return ''
 
     @staticmethod
@@ -104,7 +144,8 @@ class GetPyPiLatestVersion():
 
         version_list = version.split('.')
         if abs(add_loc) > len(version_list):
-            raise ValueError(f'add_loc must be between [-{len(version_list)}, -1]. But now add_loc is {add_loc}.')
+            raise ValueError(
+                f'add_loc must be between [-{len(version_list)}, -1]. But now add_loc is {add_loc}.')
 
         add_one_ver_num = str(int(version_list[add_loc]) + 1)
         if add_loc != -1:
@@ -119,12 +160,19 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('package_name', type=str,
                         help='The specified python package name. e.g. opencv-python.')
+    parser.add_argument('-a', '--all_versions',
+                        default=False, action="store_true",
+                        help="Whether to return all release versions. Default is False.")
     args = parser.parse_args()
 
     obtainer = GetPyPiLatestVersion()
 
-    latest_version = obtainer(args.package_name)
-    print(latest_version)
+    latest_version = obtainer(args.package_name, args.all_versions)
+    if args.all_versions:
+        print(latest_version[0])
+        print(latest_version[1])
+    else:
+        print(latest_version)
 
 
 if __name__ == '__main__':

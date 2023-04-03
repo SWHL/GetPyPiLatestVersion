@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 # @Author: SWHL
 # @Contact: liekkaskono@163.com
+import os
 import sys
 from pathlib import Path
 
@@ -30,6 +31,7 @@ if len(sys.argv) > 2:
     if matched_versions:
         VERSION_NUM = matched_versions
 sys.argv = sys.argv[:2]
+os.system(f"""echo "version = '{VERSION_NUM}'" >> {MODULE_NAME}/__init__.py""")
 
 setuptools.setup(
     name=MODULE_NAME,
