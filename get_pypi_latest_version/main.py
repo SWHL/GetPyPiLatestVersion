@@ -26,10 +26,10 @@ class GetPyPiLatestVersion():
 
         Args:
             package_name (str): The name of the package you want to get the latest version.
-            return_all_versions (bool, optional): Whether to return all release versions. Default is False.
+            return_all_versions (bool, optional): Whether to return all release versions. Default is :code:`False` .
 
         Returns:
-            Union[str, Tuple[str, List]]: the latest version. When :code:`return_all_versions=False` , Return Tuple: latest_version_str, all_release_list
+            Union[str, Tuple[str, List]]: the latest version. When :code:`return_all_versions=True` , Return Tuple: :code:`[latest_version_str, all_release_list]`
         """
 
         all_versions_web = self.get_by_spider_web(package_name)
