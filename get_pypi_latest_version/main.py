@@ -22,17 +22,23 @@ class GetPyPiLatestVersion():
 
     def __call__(self, package_name: str,
                  return_all_versions: bool = False) -> Union[str, Tuple[str, List]]:
-        """
+        """_summary_
 
         Args:
             package_name (str): The name of the package you want to get the latest version.
             return_all_versions (bool, optional): Whether to return all release versions. Default is :code:`False` .
 
+        Raises:
+            ValueError: The exception is thrown when no valid package information is found.
+
         Returns:
             Union[str, Tuple[str, List]]: the latest version. When :code:`return_all_versions=True` , Return Tuple: :code:`[latest_version_str, all_release_list]`
         """
+        try:
+            all_versions_web = self.get_by_spider_web(package_name)
+        except ValueError as e:
+            raise e
 
-        all_versions_web = self.get_by_spider_web(package_name)
         latest_ver_web = all_versions_web[0]
 
         latest_ver_pip = self.get_by_pip_index(package_name)
@@ -76,11 +82,17 @@ class GetPyPiLatestVersion():
                     package_info['href'] = self._base_url + package_href
                 package_info['latest'] = version
                 break
+
+        if not package_info:
+            raise ValueError(f'No version information of {package_name}. '
+                             'Please check if the package name correct.')
         all_versions = self.get_all_release_versions(package_info)
         return all_versions
 
     def get_all_release_versions(self, package_info: Dict):
-        response = requests.session().get(package_info['href'] + '#history')
+        history_url = package_info['href'] + '#history'
+        response = requests.session().get(history_url,
+                                          timeout=REQUESTS_TIMEOUT)
         content = parse(response.content, namespaceHTMLElements=False)
         a_elements = content.findall(
             './/*[@class="release"]/a[@class="card release__card"]')
