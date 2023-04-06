@@ -6,6 +6,6 @@ from get_pypi_latest_version import GetPyPiLatestVersion
 
 obtainer = GetPyPiLatestVersion()
 
-package_name = 'opencv-python'
+package_name = 'opencv-pytho'
 latest_version = obtainer(package_name, return_all_versions=False)
 print(latest_version)
