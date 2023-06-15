@@ -6,6 +6,7 @@ from get_pypi_latest_version import GetPyPiLatestVersion
 
 obtainer = GetPyPiLatestVersion()
 
-package_name = 'opencv-pytho'
-latest_version = obtainer(package_name, return_all_versions=False)
+package_name = 'Pillow'
+latest_version, all_versions = obtainer(package_name, return_all_versions=True)
 print(latest_version)
+print(all_versions)
