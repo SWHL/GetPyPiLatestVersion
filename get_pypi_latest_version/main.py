@@ -40,15 +40,11 @@ class GetPyPiLatestVersion():
             raise e
 
         latest_ver_web = all_versions_web[0]
-
         latest_ver_pip = self.get_by_pip_index(package_name)
-
-        all_concat_ver = list(set(all_versions_web).union(self.pip_versions))
-        all_concat_ver.sort(reverse=True)
 
         latest_ver = latest_ver_web or latest_ver_pip or ''
         if return_all_versions:
-            return latest_ver, all_concat_ver
+            return latest_ver, all_versions_web
         return latest_ver
 
     def get_by_spider_web(self, package_name: str) -> str:
@@ -96,9 +92,12 @@ class GetPyPiLatestVersion():
         content = parse(response.content, namespaceHTMLElements=False)
         a_elements = content.findall(
             './/*[@class="release"]/a[@class="card release__card"]')
+        a_elemnets_old = content.findall(
+            './/*[@class="release release--oldest"]/a[@class="card release__card"]')
+        a_elements.extend(a_elemnets_old)
 
         release_list = [package_info['latest']]
-        for i, a_ele in enumerate(a_elements):
+        for a_ele in a_elements:
             p_ele = a_ele.find('p[@class="release__version"]')
 
             # 查看是否是yanked 版本
@@ -110,7 +109,6 @@ class GetPyPiLatestVersion():
             cur_version = [v.strip() for v in p_ele.text.split('\n')
                            if v.strip()][0]
             release_list.append(cur_version)
-        release_list.sort(reverse=True)
         return release_list
 
     def get_by_pip_index(self, package_name: str) -> List:
@@ -133,7 +131,7 @@ class GetPyPiLatestVersion():
         pattern = r'\d+\.(?:\d+\.)*\d+'
         matched_versions = re.findall(pattern, message)
         all_versions = list(set(matched_versions))
-        all_versions.sort(reverse=True)
+        all_versions.sort(key=matched_versions.index)
 
         if all_versions:
             self.pip_versions = all_versions
