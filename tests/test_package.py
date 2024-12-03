@@ -11,17 +11,17 @@ root_dir = cur_dir.parent
 
 sys.path.append(str(root_dir))
 
-from get_pypi_latest_version import GetPyPiLatestVersion
+from get_pypi_latest_version import GetPyPiLatestVersion, GetPypiLatestVersionError
 
 obtainer = GetPyPiLatestVersion()
 
 
 def test_right_package_name():
-    latest_version = obtainer('opencv-python')
+    latest_version = obtainer("opencv-python")
     assert len(latest_version) > 0
 
 
 def test_wrong_name():
-    with pytest.raises(ValueError) as exc_info:
-        obtainer('opencv-pytho')
-    assert exc_info.type is ValueError
+    with pytest.raises(GetPypiLatestVersionError) as exc_info:
+        obtainer("opencv-pytho")
+    assert exc_info.type is GetPypiLatestVersionError
