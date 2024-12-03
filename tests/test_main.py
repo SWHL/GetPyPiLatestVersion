@@ -16,6 +16,29 @@ from get_pypi_latest_version import GetPyPiLatestVersion, GetPypiLatestVersionEr
 obtainer = GetPyPiLatestVersion()
 
 
+def test_extract_version():
+    msg = "feat(rapidocr_onnxruntime): bump to v1.0.0"
+    version = obtainer.extract_version(msg)
+    assert version == "1.0.0"
+
+
+def test_return_all_versions():
+    _, all_versions = obtainer("rapidocr_onnxruntime", return_all_versions=True)
+    assert len(all_versions) > 0
+
+
+def test_add_one():
+    version = "1.4.0"
+    result = obtainer.version_add_one(version, add_major=True)
+    assert result == "2.4.0"
+
+    result = obtainer.version_add_one(version, add_minor=True)
+    assert result == "1.5.0"
+
+    result = obtainer.version_add_one(version, add_patch=True)
+    assert result == "1.4.1"
+
+
 def test_right_package_name():
     latest_version = obtainer("opencv-python")
     assert len(latest_version) > 0

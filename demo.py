@@ -7,5 +7,7 @@ obtainer = GetPyPiLatestVersion()
 
 package_name = "rapidocr-openvino"
 latest_version, all_versions = obtainer(package_name, return_all_versions=True)
-print(latest_version)
-print(all_versions)
+t = obtainer.version_add_one(latest_version)
+print(t)
+# print(latest_version)
+# print(all_versions)

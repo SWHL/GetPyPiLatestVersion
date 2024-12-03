@@ -1,4 +1,5 @@
 ## get_pypi_latest_version
+
 <p>
     <a href=""><img src="https://img.shields.io/badge/Python->=3.6,<3.12-aff.svg"></a>
     <a href=""><img src="https://img.shields.io/badge/OS-Linux%2C%20Win%2C%20Mac-pink.svg"></a>
@@ -10,13 +11,16 @@
 </a>
 </p>
 
+### 1. Install package by pypi
 
-### 1. Install package by pypi.
 ```bash
-$ pip install get_pypi_latest_version
+pip install get_pypi_latest_version
 ```
-### 2. Run by command line.
+
+### 2. Run by command line
+
 - Usage:
+
     ```bash
     $ get_pypi_latest_version -h
     usage: get_pypi_latest_version [-h] [-a] package_name
@@ -29,7 +33,9 @@ $ pip install get_pypi_latest_version
     -a, --all_versions  Whether to return all release versions. Default is
                         False.
     ```
+
 - Example:
+
     ```bash
     $ get_pypi_latest_version opencv-python
     # 4.7.0.72
@@ -42,7 +48,9 @@ $ pip install get_pypi_latest_version
     $ get_pypi_latest_version opencv
     # ValueError: No version information of opencv-pytho. Please check if the package name correct.
     ```
-### 3. Use by python script.
+
+### 3. Use by python script
+
 ```python
 from get_pypi_latest_version import GetPyPiLatestVersion
 
@@ -59,13 +67,6 @@ print(latest_version)
 print(all_versions)
 ```
 
-### Change log
-- 2023-04-06 v0.0.10 update:
-  - Add unit test and add exception capture.
-- 2023-04-03 v0.0.8 update:
-  - Add `return_all_versions` parameter.
-- 2023-03-26 v0.0.4~5 update:
-  - Add [docs](https://getpypilatestversion.readthedocs.io/en/latest/)
-
 ### Reference
+
 - [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)

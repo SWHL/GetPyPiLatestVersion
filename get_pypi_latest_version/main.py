@@ -3,18 +3,16 @@
 # @Contact: liekkaskono@163.com
 import argparse
 from typing import Dict, List, Optional, Tuple, Union
-
+import re
 import requests
+from packaging.version import parse
 
-REQUESTS_TIMEOUT = 15
+REQUESTS_TIMEOUT = 45
 
 
 class GetPyPiLatestVersion:
-    """Get the latest version of the specified python package name in the pypi."""
-
-    def __init__(self, url: str = "https://pypi.org/") -> None:
+    def __init__(self, url: str = "https://pypi.org/pypi"):
         self._base_url = url
-        self.pip_versions = []
 
     def __call__(
         self, package_name: str, return_all_versions: bool = False
@@ -31,8 +29,8 @@ class GetPyPiLatestVersion:
         return str(latest_ver)
 
     def get_package_data(self, package_name: str):
-        url = f"https://pypi.org/pypi/{package_name}/json"
-        response = requests.get(url)
+        json_url = f"{self._base_url}/{package_name}/json"
+        response = requests.get(json_url, timeout=REQUESTS_TIMEOUT)
         if response.status_code == 200:
             data = response.json()
             return data
@@ -55,33 +53,50 @@ class GetPyPiLatestVersion:
             release_list.append(str(version_num))
         return release_list
 
-    @staticmethod
-    def version_add_one(version: Optional[str], add_loc: int = -1) -> str:
-        """Add one for direct version.
+    def extract_version(self, message: str) -> str:
+        """Extract the version string matched the semver 2.0.0 from the string.
 
         Args:
-            version (Optional[str]): current version num
-            add_loc (int, optional): Where to add one from the back to front. Default is -1. e.g. 4.0.7, when `add_loc=-1` → 4.0.8, `add_loc=-2` → 4.1.0， `add_loc=-3` → 5.0.0.
+            message (str): the text with the version num.
 
         Returns:
-            str: the version after adding one.
+            str: '' or 'x.x.x'
         """
+        pattern = r"\d+\.(?:\d+\.)*\d+"
+        matched_versions = re.findall(pattern, message)
+        all_versions = list(set(matched_versions))
+        all_versions.sort(key=matched_versions.index)
+
+        if all_versions:
+            return all_versions[0]
+        return ""
+
+    @staticmethod
+    def version_add_one(
+        version: Optional[str],
+        add_patch: bool = False,
+        add_minor: bool = False,
+        add_major: bool = False,
+    ) -> str:
         if not version:
             return "1.0.0"
 
-        version_list = version.split(".")
-        if abs(add_loc) > len(version_list):
-            raise ValueError(
-                f"add_loc must be between [-{len(version_list)}, -1]. But now add_loc is {add_loc}."
-            )
+        version = parse(version)
 
-        add_one_ver_num = str(int(version_list[add_loc]) + 1)
-        if add_loc != -1:
-            version_list[add_loc + 1 :] = ["0"] * len(version_list[add_loc + 1 :])
+        patch = version.micro
+        minor = version.minor
+        major = version.major
 
-        version_list[add_loc] = add_one_ver_num
-        new_version = ".".join(version_list)
-        return new_version
+        if add_patch:
+            patch += 1
+
+        if add_minor:
+            minor += 1
+
+        if add_major:
+            major += 1
+
+        return f"{major}.{minor}.{patch}"
 
 
 class GetPypiLatestVersionError(Exception):

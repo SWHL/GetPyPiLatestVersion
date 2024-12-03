@@ -53,7 +53,7 @@ setuptools.setup(
     download_url="https://github.com/SWHL/GetPyPiLatestVersion.git",
     license="Apache-2.0",
     include_package_data=True,
-    install_requires=read_txt("requirements_ort.txt"),
+    install_requires=read_txt("requirements.txt"),
     packages=[MODULE_NAME],
     keywords=["pypi,latest_version"],
     classifiers=[
@@ -69,10 +69,5 @@ setuptools.setup(
     python_requires=">=3.6,<3.13",
     entry_points={
         "console_scripts": [f"{MODULE_NAME}={MODULE_NAME}.main:main"],
-    },
-    project_urls={
-        "Documentation": "https://getpypilatestversion.readthedocs.io/",
-        "Source": "https://github.com/SWHL/GetPyPiLatestVersion",
-        "Changelog": "https://github.com/SWHL/GetPyPiLatestVersion#change-log",
     },
 )
