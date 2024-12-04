@@ -6,9 +6,7 @@
     <a href="https://pypi.org/project/get_pypi_latest_version/"><img alt="PyPI" src="https://img.shields.io/pypi/v/get_pypi_latest_version"></a>
     <a href="https://pepy.tech/project/get-pypi-latest-version"><img src="https://static.pepy.tech/personalized-badge/get-pypi-latest-version?period=total&units=abbreviation&left_color=grey&right_color=blue&left_text=Downloads"></a>
     <a href="https://semver.org/"><img alt="SemVer2.0" src="https://img.shields.io/badge/SemVer-2.0-brightgreen"></a>
-<a href='https://getpypilatestversion.readthedocs.io/en/latest/?badge=latest'>
-    <img src='https://readthedocs.org/projects/getpypilatestversion/badge/?version=latest' alt='Documentation Status' />
-</a>
+    <a href="https://github.com/psf/black"><img src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
 ### 1. Install package by pypi
