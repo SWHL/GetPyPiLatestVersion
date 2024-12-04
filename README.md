@@ -65,8 +65,23 @@ latest_version = result[0]
 all_versions = result[1]
 print(latest_version)
 print(all_versions)
+
+# version add one
+latest_version = '1.4.0'
+next_version = obtainer.version_add_one(latest_version, add_patch=True)
+# 1.4.1
+
+next_version = obtainer.version_add_one(latest_version, add_minor=True)
+# 1.5.0
+
+next_version = obtainer.version_add_one(latest_version, add_major=True)
+# 2.4.0
+
+next_version = obtainer.version_add_one(latest_version, add_patch=True, add_minor=True, add_major=True)
+# 2.5.1
 ```
 
 ### Reference
 
 - [poetry](https://github.com/python-poetry/poetry/blob/master/src/poetry/repositories/pypi_repository.py#L36)
+- [funASR](https://github.com/modelscope/FunASR/blob/8b1be8c3cba8987e9993619b46e59039ef3d6560/funasr/utils/version_checker.py)
